@@ -1,0 +1,14 @@
+{
+  "name": "faketype",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Kinetic fake-typing playground for manuscripts, Markdown, and PDFs.",
+  "scripts": {
+    "test": "playwright test",
+    "test:smoke": "playwright test tests/smoke.spec.js",
+    "test:headed": "playwright test --headed"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.63.0"
+  }
+}
