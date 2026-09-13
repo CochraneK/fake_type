@@ -16,13 +16,28 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Check JavaScript syntax
-        run: node --check app.js
+        run: |
+          node --check app.js
+          node --check enhancements.js
+          node --check sw.js
+
+      - name: Validate manifest JSON
+        run: node -e "JSON.parse(require('fs').readFileSync('manifest.webmanifest','utf8'))"
 
       - name: Check required files and references
         shell: bash
         run: |
           test -f index.html
           test -f styles.css
+          test -f enhancements.css
           test -f app.js
+          test -f enhancements.js
+          test -f manifest.webmanifest
+          test -f favicon.svg
+          test -f sw.js
           grep -q 'href="styles.css"' index.html
+          grep -q 'href="enhancements.css"' index.html
+          grep -q 'href="manifest.webmanifest"' index.html
+          grep -q 'href="favicon.svg"' index.html
           grep -q 'src="app.js"' index.html
+          grep -q 'src="enhancements.js"' index.html
