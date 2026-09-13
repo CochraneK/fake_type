@@ -1,4 +1,4 @@
-const CACHE = 'faketype-shell-v3';
+const CACHE = 'faketype-shell-v4';
 const ASSETS = [
   './',
   './index.html',
@@ -30,7 +30,7 @@ async function networkFirst(request) {
     const response = await fetch(request);
     if (response?.ok) {
       const cache = await caches.open(CACHE);
-      cache.put(request, response.clone());
+      await cache.put(request, response.clone());
     }
     return response;
   } catch (_) {
@@ -50,7 +50,17 @@ async function staleWhileRevalidate(request) {
     })
     .catch(() => null);
 
-  return cached || update || caches.match('./index.html');
+  if (cached) {
+    eventWaitUntilSafe(update);
+    return cached;
+  }
+
+  const updated = await update;
+  return updated || caches.match('./index.html');
+}
+
+function eventWaitUntilSafe(promise) {
+  promise.catch(() => {});
 }
 
 self.addEventListener('fetch', (event) => {
