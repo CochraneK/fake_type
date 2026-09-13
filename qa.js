@@ -68,6 +68,26 @@
     });
   }
 
+  function routeTypingAwayFromButtons() {
+    window.addEventListener('keydown', (event) => {
+      if (event.ctrlKey || event.metaKey || event.altKey) return;
+      const target = event.target;
+      if (!target?.matches?.('button')) return;
+      if (['Enter', ' ', 'Tab', 'Escape'].includes(event.key)) return;
+
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      target.blur();
+      window.dispatchEvent(new KeyboardEvent('keydown', {
+        key: event.key,
+        code: event.code,
+        bubbles: true,
+        cancelable: true,
+        shiftKey: event.shiftKey
+      }));
+    }, true);
+  }
+
   function quietLargeLiveRegions() {
     const paper = byId('paper');
     if (paper) paper.removeAttribute('aria-live');
@@ -174,6 +194,7 @@
     installSkipLink();
     syncActionLabels();
     setupKeyboardInteraction();
+    routeTypingAwayFromButtons();
     quietLargeLiveRegions();
     setupProgressBars();
     enhancePdfFailureMessage();
