@@ -21,9 +21,27 @@ jobs:
           node --check enhancements.js
           node --check qa.js
           node --check sw.js
+          node --check playwright.config.js
+          node --check tests/smoke.spec.js
 
-      - name: Validate manifest JSON
-        run: node -e "JSON.parse(require('fs').readFileSync('manifest.webmanifest','utf8'))"
+      - name: Validate JSON metadata
+        run: |
+          node -e "JSON.parse(require('fs').readFileSync('manifest.webmanifest','utf8'))"
+          node -e "JSON.parse(require('fs').readFileSync('package.json','utf8'))"
+
+      - name: Check HTML integrity
+        run: |
+          python3 - <<'PY'
+          import re
+          from pathlib import Path
+          html = Path('index.html').read_text()
+          ids = re.findall(r'\bid=["\']([^"\']+)["\']', html)
+          duplicates = sorted({value for value in ids if ids.count(value) > 1})
+          if duplicates:
+              raise SystemExit(f'Duplicate HTML ids: {duplicates}')
+          if '<iframe' in html.lower() or 'srcdoc=' in html.lower():
+              raise SystemExit('Legacy iframe/srcdoc architecture reintroduced')
+          PY
 
       - name: Check required files and references
         shell: bash
@@ -38,6 +56,9 @@ jobs:
           test -f manifest.webmanifest
           test -f favicon.svg
           test -f sw.js
+          test -f package.json
+          test -f playwright.config.js
+          test -f tests/smoke.spec.js
           grep -q 'href="styles.css"' index.html
           grep -q 'href="enhancements.css"' index.html
           grep -q 'href="qa.css"' index.html
