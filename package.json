@@ -3,6 +3,15 @@
   "version": "1.0.0",
   "private": true,
   "description": "Kinetic fake-typing playground for manuscripts, Markdown, and PDFs.",
+  "license": "MIT",
+  "homepage": "https://cochranek.github.io/fake_type/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/CochraneK/fake_type.git"
+  },
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "test": "playwright test",
     "test:smoke": "playwright test tests/smoke.spec.js",
