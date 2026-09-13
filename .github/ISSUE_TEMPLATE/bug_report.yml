@@ -1,0 +1,59 @@
+name: Bug report
+description: Report a reproducible problem in FakeType
+title: "[Bug] "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a problem. Please avoid attaching private manuscript or PDF content unless it is safe to share publicly.
+  - type: textarea
+    id: summary
+    attributes:
+      label: What happened?
+      description: Describe the problem and what you expected instead.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Reproduction steps
+      placeholder: |
+        1. Open ...
+        2. Click ...
+        3. Press ...
+    validations:
+      required: true
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and version
+      placeholder: Chrome 153 / Safari 26 / Firefox 155
+    validations:
+      required: true
+  - type: dropdown
+    id: viewport
+    attributes:
+      label: Device type
+      options:
+        - Desktop/laptop
+        - Phone
+        - Tablet
+        - Other
+    validations:
+      required: true
+  - type: dropdown
+    id: source
+    attributes:
+      label: Content source
+      options:
+        - Built-in manuscript
+        - Preset
+        - Pasted text / Markdown
+        - PDF
+        - Not applicable
+  - type: textarea
+    id: notes
+    attributes:
+      label: Additional context
+      description: Screenshots, console errors, and a non-sensitive sample file are useful when available.
