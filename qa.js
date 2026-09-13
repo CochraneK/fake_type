@@ -35,11 +35,42 @@
     }
   }
 
-  function setupKeyboardVisual() {
+  function keyEventValue(text) {
+    if (text === 'Space') return ' ';
+    if (text === 'Enter') return 'Enter';
+    if (text === '⌫') return 'Backspace';
+    return text;
+  }
+
+  function setupKeyboardInteraction() {
     const keyboard = byId('keyboard');
     if (!keyboard) return;
-    keyboard.setAttribute('role', 'img');
-    keyboard.setAttribute('aria-label', isZh() ? '键盘按键活动可视化' : 'Keyboard activity visualization');
+    keyboard.setAttribute('role', 'group');
+    keyboard.setAttribute('aria-label', isZh() ? '可点击的虚拟键盘' : 'Interactive virtual keyboard');
+
+    keyboard.querySelectorAll('.key').forEach((key) => {
+      const text = key.textContent.trim();
+      key.setAttribute('role', 'button');
+      key.setAttribute('tabindex', '0');
+      key.setAttribute('aria-label', isZh() ? `输入 ${text}` : `Type ${text}`);
+
+      if (!key.dataset.qaPointerBound) {
+        key.dataset.qaPointerBound = '1';
+        key.addEventListener('click', () => {
+          const value = keyEventValue(key.textContent.trim());
+          window.dispatchEvent(new KeyboardEvent('keydown', {
+            key: value,
+            bubbles: true,
+            cancelable: true
+          }));
+        });
+      }
+    });
+  }
+
+  function quietLargeLiveRegions() {
+    const paper = byId('paper');
+    if (paper) paper.removeAttribute('aria-live');
   }
 
   function setupProgressBars() {
@@ -84,20 +115,34 @@
     observer.observe(toast, { childList: true, characterData: true, subtree: true });
   }
 
+  function rejectLargePdf(file) {
+    if (!file || file.size <= 80 * 1024 * 1024 || !/\.pdf$/i.test(file.name)) return false;
+    const toast = byId('toast');
+    if (!toast) return true;
+    toast.textContent = isZh()
+      ? 'PDF 超过 80 MB。为避免浏览器卡死，请先压缩或拆分文件。'
+      : 'This PDF is over 80 MB. Compress or split it first to avoid freezing the browser.';
+    toast.classList.add('show');
+    window.setTimeout(() => toast.classList.remove('show'), 3200);
+    return true;
+  }
+
   function guardVeryLargePdf() {
     const input = byId('pdfInput');
-    const toast = byId('toast');
-    if (!input || !toast) return;
-    input.addEventListener('change', (event) => {
-      const file = event.target.files?.[0];
-      if (!file || file.size <= 80 * 1024 * 1024) return;
+    if (input) {
+      input.addEventListener('change', (event) => {
+        const file = event.target.files?.[0];
+        if (!rejectLargePdf(file)) return;
+        event.stopImmediatePropagation();
+        input.value = '';
+      }, true);
+    }
+
+    document.addEventListener('drop', (event) => {
+      const file = event.dataTransfer?.files?.[0];
+      if (!rejectLargePdf(file)) return;
+      event.preventDefault();
       event.stopImmediatePropagation();
-      input.value = '';
-      toast.textContent = isZh()
-        ? 'PDF 超过 80 MB。为避免浏览器卡死，请先压缩或拆分文件。'
-        : 'This PDF is over 80 MB. Compress or split it first to avoid freezing the browser.';
-      toast.classList.add('show');
-      window.setTimeout(() => toast.classList.remove('show'), 3200);
     }, true);
   }
 
@@ -115,7 +160,7 @@
   function observeLanguageAndLabels() {
     const refresh = () => {
       syncActionLabels();
-      setupKeyboardVisual();
+      setupKeyboardInteraction();
       const skip = document.querySelector('.skip-link');
       if (skip) skip.textContent = isZh() ? '跳到稿件' : 'Skip to manuscript';
     };
@@ -128,7 +173,8 @@
   function init() {
     installSkipLink();
     syncActionLabels();
-    setupKeyboardVisual();
+    setupKeyboardInteraction();
+    quietLargeLiveRegions();
     setupProgressBars();
     enhancePdfFailureMessage();
     guardVeryLargePdf();
