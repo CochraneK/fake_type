@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://cochranek.github.io/fake_type/sitemap.xml
