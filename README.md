@@ -1,63 +1,66 @@
 # FakeType
 
+![FakeType — Mash the keyboard. Write anything.](social-card.svg)
+
 **Mash the keyboard. Write anything.**
 
-FakeType is a browser-based kinetic writing playground: every random keystroke advances a manuscript, so you can perform the *appearance* of fast, deliberate writing without typing the actual text.
+[Live Demo](https://cochranek.github.io/fake_type/) · [QA checklist](QA.md) · [Changelog](CHANGELOG.md) · [Contributing](CONTRIBUTING.md)
 
-It is a lightweight static web app and can be hosted directly on GitHub Pages.
+![Static validation](https://github.com/CochraneK/fake_type/actions/workflows/validate.yml/badge.svg)
+![Browser smoke tests](https://github.com/CochraneK/fake_type/actions/workflows/e2e.yml/badge.svg)
+
+FakeType is a browser-based kinetic writing playground. Every random keystroke advances a manuscript, so you can perform the *appearance* of fast, deliberate writing without typing the actual text. Paste your own material, load Markdown or a PDF, then type nonsense and watch the document unfold.
+
+The project is a framework-free static web app deployed directly with GitHub Pages.
+
+## Try it in 20 seconds
+
+1. Open the **[Live Demo](https://cochranek.github.io/fake_type/)**.
+2. Press **Start typing** and mash random keys — or tap the on-screen keyboard on touch devices.
+3. Pick **Presets** for an instant demo, or import your own text / Markdown / PDF.
+4. Raise **Chaos**, enable **Storm**, then press `F` for Cinema mode.
+5. Use **Export** to save the currently revealed performance as Markdown.
 
 ## Highlights
 
-- **Fake typing engine** — any key advances the current manuscript.
-- **Presets** — ready-made research paper, keynote, manifesto, and Chinese clinical-note demos.
-- **Custom text import** — paste plain text or Markdown and turn it into a fake-typing manuscript.
+- **Fake typing engine** — physical or virtual keyboard input advances the hidden manuscript.
+- **Touch-ready virtual keyboard** — phones and tablets can perform the same interaction without a hardware keyboard.
+- **Presets** — research paper, keynote, manifesto, and Chinese clinical-note demos.
+- **Custom text import** — paste plain text or Markdown; headings become manuscript sections.
 - **Drag & drop** — load `.txt`, `.md`, and PDF files directly in the browser.
 - **PDF manuscript import** — PDF.js extracts text locally and FakeType detects common academic sections.
-- **Two-column PDF heuristic** — attempts to preserve reading order for common two-column papers.
+- **Two-column PDF heuristic** — attempts to restore reading order for common scholarly layouts.
 - **PDF progress + cancel** — large documents show per-page analysis progress and can be canceled.
+- **Scanned-PDF guidance** — image-only files get a clear OCR-oriented failure message instead of a generic error.
 - **Demo mode** — automatically performs keystrokes while gradually increasing Chaos.
 - **Export** — save the currently revealed manuscript as Markdown.
 - **English / 中文 UI** — switch the interface language at any time.
 - **Typing audio** — lightweight Web Audio feedback for keystrokes and revisions.
-- **Chaos control** — four visual intensity tiers progressively disturb the otherwise formal paper layout.
-- **Academic Breakdown** — extreme Chaos adds intermittent page jolts, drifting sections, intensified cursor behavior, and kinetic word bursts while keeping the manuscript readable.
-- **Word Storm** — optional kinetic text particles; extreme Chaos can also trigger bursts automatically.
-- **Cinema mode** — press `F` or use the Cinema button for a distraction-free fullscreen performance view.
-- **Shareable settings** — share language, tempo, chaos, sound, storm, and cinema settings in the URL.
-- **Keyboard help** — built-in shortcut reference without sacrificing normal fake-typing keys.
-- **Installable/offline shell** — a web app manifest and service worker cache the local application shell for repeat visits.
-- **Responsive layout** — desktop and mobile friendly.
-- **Reduced-motion support** — respects `prefers-reduced-motion`.
+- **Chaos control** — four visual intensity tiers progressively disturb the formal paper layout.
+- **Academic Breakdown** — extreme Chaos adds page jolts, drifting sections, stronger cursor behavior, and kinetic bursts.
+- **Word Storm** — optional kinetic text particles; extreme Chaos can trigger bursts automatically.
+- **Cinema mode** — press `F` for a distraction-free fullscreen performance view.
+- **Shareable settings** — language, tempo, chaos, sound, storm, and cinema can be encoded in the URL.
+- **PWA/offline shell** — the local application shell is cached for repeat visits.
+- **Accessibility + reduced motion** — skip navigation, focus styles, progress semantics, ARIA labels, and `prefers-reduced-motion` support.
 
-## How to use
-
-1. Open the GitHub Pages site or serve the repository locally.
-2. Start pressing random keys. You do **not** need to type the correct letters.
-3. Choose **Presets** for an instant demo, or **Load text** for your own Markdown/plain text.
-4. Use **PDF** or drag a PDF onto the page to analyze a local paper.
-5. Adjust **Tempo** and **Chaos** to change rhythm and visual instability.
-6. Use **Demo** if you want FakeType to perform automatically while Chaos ramps upward.
-7. Turn on **Storm** when you want kinetic words to fly toward the viewer.
-8. Press **F** for Cinema mode.
-9. Use **Export** to save the currently visible/revealed manuscript as Markdown.
-10. Use **Share** to copy/share a URL that recreates the current interface settings.
-
-## Shortcuts
+## Controls
 
 | Shortcut | Action |
 | --- | --- |
 | Any unmodified key | advance the manuscript |
+| Tap/click an on-screen key | advance the manuscript on touch devices |
 | `F` | toggle Cinema mode |
 | `Ctrl/⌘ + O` | open text import |
 | `Ctrl/⌘ + E` | export the visible manuscript |
 | `Ctrl/⌘ + D` | toggle Demo mode |
 | `Ctrl/⌘ + /` | open help |
 
-The modifier-based shortcuts are intentional: normal letter keys remain available as fake-typing input.
+Modifier-based shortcuts are intentional: ordinary letter keys remain available as fake-typing input.
 
 ## Markdown structure
 
-When importing text, Markdown headings become manuscript sections:
+Markdown headings become manuscript sections:
 
 ```md
 # My Paper
@@ -73,11 +76,9 @@ If no headings are present, FakeType treats the whole document as one body secti
 
 ## Export behavior
 
-Export creates a local `.md` download containing the part of the manuscript that is **currently revealed on screen**. This makes export useful as a snapshot of a performance rather than a way to silently recover the entire hidden source document.
+Export creates a local `.md` download containing only the part of the manuscript that is **currently revealed on screen**. It behaves as a performance snapshot rather than a way to silently recover the entire hidden source document.
 
-## URL settings
-
-FakeType understands these optional query parameters:
+## Shareable URL settings
 
 ```text
 ?lang=zh&tempo=92&chaos=70&storm=1&sound=0&cinema=1
@@ -86,35 +87,35 @@ FakeType understands these optional query parameters:
 | Parameter | Meaning |
 | --- | --- |
 | `lang=en|zh` | interface/manuscript language |
-| `tempo=24..150` | auto-typing tempo |
+| `tempo=24..150` | automatic typing tempo |
 | `chaos=0..100` | revision probability and visual intensity |
 | `storm=1` | enable Word Storm bursts |
 | `sound=0` | start muted |
-| `cinema=1` | start in distraction-free Cinema layout |
+| `cinema=1` | start in Cinema layout |
 
 Imported document content is deliberately **not** encoded into share URLs.
 
 ## PDF handling
 
-PDF import runs entirely in the browser using PDF.js. FakeType:
+PDF import runs in the browser using a pinned PDF.js build. FakeType:
 
 1. reads each page,
 2. groups nearby text items into lines,
-3. applies a simple two-column reading-order heuristic when appropriate,
-4. looks for common headings such as Abstract, Introduction, Methods, Results, Discussion, Conclusion, References, and common Chinese equivalents,
+3. applies a two-column reading-order heuristic when appropriate,
+4. detects common headings such as Abstract, Introduction, Methods, Results, Discussion, Conclusion, References, and common Chinese equivalents,
 5. falls back to chunked body sections when a reliable structure cannot be detected.
 
-This is intentionally heuristic rather than a full scholarly-document parser. Complex layouts, scanned/image-only PDFs, mathematical notation, tables, and unusual multi-column documents may still produce imperfect results.
+PDF parsing is intentionally heuristic rather than a full scholarly-document parser. Complex layouts, equations, tables, unusual columns, and scanned/image-only PDFs can still be imperfect. PDFs over 80 MB are rejected before parsing to reduce the risk of freezing the browser. Image-only PDFs should be OCR'd first or converted to pasted text.
 
 ## Privacy
 
-Imported text and files are processed in the browser and are not uploaded by FakeType. PDF parsing uses PDF.js loaded from a public CDN; the selected PDF itself stays local to the page.
+Imported text and files are processed locally in the browser and are not uploaded by FakeType. PDF.js itself is loaded from a public CDN, while the selected PDF remains local to the page.
 
-Share URLs contain interface settings only, not imported manuscript content.
+Share URLs contain interface settings only, not imported manuscript content. See [SECURITY.md](SECURITY.md) for the project's security boundary and reporting guidance.
 
 ## Offline / PWA behavior
 
-`manifest.webmanifest`, `favicon.svg`, and `sw.js` make FakeType installable as a lightweight web app on supported browsers. The service worker caches the local shell (`index.html`, CSS, JavaScript, manifest, and icon) for repeat visits.
+`manifest.webmanifest`, `favicon.svg`, and `sw.js` make FakeType installable as a lightweight web app on supported browsers. Navigation uses a network-first strategy, while static local assets use stale-while-revalidate so returning users get offline resilience without being trapped on stale deployments.
 
 PDF.js is still loaded from a CDN, so **offline PDF importing is not guaranteed**. Built-in manuscripts, presets, text import, fake typing, export, Cinema, and Chaos effects remain local features.
 
@@ -122,50 +123,71 @@ PDF.js is still loaded from a CDN, so **offline PDF importing is not guaranteed*
 
 ```text
 index.html               # semantic application shell
-styles.css               # core paper UI, responsive layout, Cinema + Chaos states
+styles.css               # core paper UI and responsive layout
 app.js                   # typing engine, imports, audio, storm, sharing and runtime
-enhancements.css          # presets/help/demo/export + Academic Breakdown styling
-enhancements.js           # optional product/interaction enhancement layer
-manifest.webmanifest      # installable web-app metadata
-favicon.svg               # application icon
-sw.js                     # offline shell cache
-.github/workflows/        # syntax and static-reference validation
-.nojekyll                 # GitHub Pages compatibility
-README.md                 # project documentation
+
+enhancements.css         # presets/help/demo/export + Academic Breakdown styling
+enhancements.js          # optional product/interaction enhancement layer
+
+qa.css                   # mobile, focus and touch polish
+qa.js                    # accessibility, touch keyboard and browser guardrails
+QA.md                    # manual release checklist
+
+manifest.webmanifest     # installable web-app metadata
+favicon.svg              # application icon
+sw.js                    # offline shell cache
+social-card.svg          # README / project branding card
+robots.txt               # crawler directives
+sitemap.xml              # GitHub Pages sitemap
+
+tests/smoke.spec.js      # Playwright critical-path browser tests
+playwright.config.js     # desktop + mobile Chromium test configuration
+.github/workflows/       # static validation + browser CI
 ```
 
-There is no framework or build step. The core engine and enhancement layer are separate so product features can evolve without destabilizing PDF/typing runtime code.
+There is no framework or application build step. The core runtime, optional product features, and QA/accessibility layer are deliberately separated so the experience can evolve without destabilizing PDF and typing logic.
 
 ## Performance
 
-FakeType does **not** keep a permanent animation loop alive. `requestAnimationFrame` runs only while automatic typing is active or Word Storm particles actually exist. When the page is idle, the animation loop stops.
+FakeType does **not** keep a permanent animation loop alive. `requestAnimationFrame` runs only while automatic typing is active or Word Storm particles exist. When the page is idle, the animation loop stops.
 
 Demo mode uses a temporary interval and restores the user's Tempo and Chaos values when it stops.
 
 ## Browser support
 
-A current Chromium, Firefox, or Safari release is recommended. PDF import requires dynamic ES modules and Web Workers supported by modern browsers. Fullscreen behavior depends on browser permissions; the Cinema layout still works if fullscreen is unavailable. PWA installation support varies by browser/platform.
+A current Chromium, Firefox, or Safari release is recommended. PDF import requires dynamic ES modules and Web Workers. Fullscreen behavior depends on browser permissions; the Cinema layout still works if fullscreen is unavailable. PWA installation support varies by browser/platform.
+
+Automated smoke tests currently exercise desktop and mobile Chromium. The manual cross-browser release matrix lives in [QA.md](QA.md).
 
 ## Development
 
-Clone the repository and serve the directory with any static file server:
+Serve the repository root with any static server:
 
 ```bash
-python -m http.server 8000
+python3 -m http.server 8000
 ```
 
-Then open `http://localhost:8000`.
+For browser smoke tests:
 
-For the same basic validation used by CI:
+```bash
+npm install
+npx playwright install chromium
+npm test
+```
+
+For the lightweight syntax checks used by static CI:
 
 ```bash
 node --check app.js
 node --check enhancements.js
+node --check qa.js
 node --check sw.js
+node --check playwright.config.js
+node --check tests/smoke.spec.js
 ```
 
-GitHub Actions also validates the manifest and required file references on every push to `main` and on pull requests.
+See [CONTRIBUTING.md](CONTRIBUTING.md) before making larger changes and [CHANGELOG.md](CHANGELOG.md) for release history.
 
 ---
 
-FakeType is designed as a playful interface experiment around writing, performance, structure, and controlled chaos.
+FakeType is a playful interface experiment around writing, performance, structure, and controlled chaos.
