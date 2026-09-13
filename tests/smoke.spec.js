@@ -108,12 +108,13 @@ test('mobile users can advance by tapping the virtual keyboard', async ({ page }
   test.skip(!testInfo.project.name.includes('mobile'), 'mobile-only interaction check');
 
   await openAndStart(page);
-  const before = await progressValue(page);
+  const title = page.locator('#paperTitle');
+  const beforeLength = (await title.textContent() || '').length;
   const firstKey = page.locator('#keyboard .key').first();
 
   await expect(firstKey).toHaveAttribute('role', 'button');
   await firstKey.tap();
-  await expect.poll(() => progressValue(page)).toBeGreaterThan(before);
+  await expect.poll(async () => (await title.textContent() || '').length).toBeGreaterThan(beforeLength);
 
   const topbar = await page.locator('.topbar').boundingBox();
   expect(topbar?.height || 999).toBeLessThan(150);
