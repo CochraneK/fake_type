@@ -188,6 +188,10 @@ node --check tests/smoke.spec.js
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) before making larger changes and [CHANGELOG.md](CHANGELOG.md) for release history.
 
+## License
+
+FakeType is released under the [MIT License](LICENSE).
+
 ---
 
 FakeType is a playful interface experiment around writing, performance, structure, and controlled chaos.
