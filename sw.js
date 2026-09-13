@@ -1,4 +1,4 @@
-const CACHE = 'faketype-shell-v1';
+const CACHE = 'faketype-shell-v2';
 const ASSETS = [
   './',
   './index.html',
@@ -23,19 +23,42 @@ self.addEventListener('activate', (event) => {
   );
 });
 
+async function networkFirst(request) {
+  try {
+    const response = await fetch(request);
+    if (response?.ok) {
+      const cache = await caches.open(CACHE);
+      cache.put(request, response.clone());
+    }
+    return response;
+  } catch (_) {
+    return (await caches.match(request)) || caches.match('./index.html');
+  }
+}
+
+async function staleWhileRevalidate(request) {
+  const cached = await caches.match(request);
+  const update = fetch(request)
+    .then(async (response) => {
+      if (response?.ok) {
+        const cache = await caches.open(CACHE);
+        await cache.put(request, response.clone());
+      }
+      return response;
+    })
+    .catch(() => null);
+
+  return cached || update || caches.match('./index.html');
+}
+
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
   if (event.request.method !== 'GET' || url.origin !== self.location.origin) return;
 
-  event.respondWith(
-    caches.match(event.request).then((cached) => {
-      if (cached) return cached;
-      return fetch(event.request).then((response) => {
-        if (!response || response.status !== 200 || response.type === 'opaque') return response;
-        const copy = response.clone();
-        caches.open(CACHE).then((cache) => cache.put(event.request, copy));
-        return response;
-      }).catch(() => caches.match('./index.html'));
-    })
-  );
+  if (event.request.mode === 'navigate') {
+    event.respondWith(networkFirst(event.request));
+    return;
+  }
+
+  event.respondWith(staleWhileRevalidate(event.request));
 });
