@@ -19,6 +19,7 @@ jobs:
         run: |
           node --check app.js
           node --check enhancements.js
+          node --check qa.js
           node --check sw.js
 
       - name: Validate manifest JSON
@@ -30,14 +31,20 @@ jobs:
           test -f index.html
           test -f styles.css
           test -f enhancements.css
+          test -f qa.css
           test -f app.js
           test -f enhancements.js
+          test -f qa.js
           test -f manifest.webmanifest
           test -f favicon.svg
           test -f sw.js
           grep -q 'href="styles.css"' index.html
           grep -q 'href="enhancements.css"' index.html
+          grep -q 'href="qa.css"' index.html
           grep -q 'href="manifest.webmanifest"' index.html
           grep -q 'href="favicon.svg"' index.html
           grep -q 'src="app.js"' index.html
           grep -q 'src="enhancements.js"' index.html
+          grep -q 'src="qa.js"' index.html
+          grep -q "'./qa.css'" sw.js
+          grep -q "'./qa.js'" sw.js
