@@ -1,11 +1,13 @@
-const CACHE = 'faketype-shell-v2';
+const CACHE = 'faketype-shell-v3';
 const ASSETS = [
   './',
   './index.html',
   './styles.css',
   './enhancements.css',
+  './qa.css',
   './app.js',
   './enhancements.js',
+  './qa.js',
   './manifest.webmanifest',
   './favicon.svg'
 ];
